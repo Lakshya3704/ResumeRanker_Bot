@@ -1,0 +1,6 @@
+Jane Doe
+Software Engineer
+Skills: Python, Django, React, SQL, Git, HTML, CSS.
+Experience:
+3 years at TechCorp. Built web applications using Python and Django.
+Education: B.S. in Computer Science.

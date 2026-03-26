@@ -33,7 +33,7 @@ from app.services.nlp_processor import process_text
 from app.services.matcher import match
 from app.services.scorer import compute_score
 from app.services.recommender import generate_recommendations
-from app.services.improver import improve_resume
+from app.services.improver import improve_resume, answer_question
 from app.services.resume_gen import generate_pdf, generate_docx
 from app.utils.helpers import save_temp_file, cleanup_temp_file, setup_logging
 
@@ -286,6 +286,33 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     context.user_data.clear()
     return ConversationHandler.END
+
+
+# ══════════════════════════════════════════════
+#  Q&A Handler for free text
+# ══════════════════════════════════════════════
+
+async def handle_question(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle general questions from the user based on their resume and JD."""
+    question = update.message.text
+    resume_text = context.user_data.get("resume_text", "")
+    jd_text = context.user_data.get("jd_text", "")
+
+    if not resume_text or not jd_text:
+        await update.message.reply_text(
+            "⚠️ Please upload your *Job Description* and *Resume* first using /start before asking questions.",
+            parse_mode="Markdown"
+        )
+        return
+
+    await update.message.reply_text("🤔 *Thinking…*", parse_mode="Markdown")
+
+    try:
+        answer = await answer_question(question, resume_text, jd_text)
+        await update.message.reply_text(answer)
+    except Exception as exc:
+        logger.exception("Failed to answer question in bot")
+        await update.message.reply_text("❌ An error occurred while generating the answer.")
 
 
 # ══════════════════════════════════════════════

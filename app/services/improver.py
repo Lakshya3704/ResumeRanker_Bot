@@ -162,3 +162,54 @@ def _improve_mock(
             improved_parts.append(f"{i}. {tip}")
 
     return "\n".join(improved_parts)
+
+
+# ──────────────────────────────────────────────
+#  Conversational Q&A
+# ──────────────────────────────────────────────
+
+async def answer_question(question: str, resume_text: str, jd_text: str) -> str:
+    """
+    Answers a user's question about their resume and the JD using OpenAI.
+    """
+    api_key = get_env("OPENAI_API_KEY", "")
+    
+    if not api_key or api_key == "your-openai-api-key-here":
+        return (
+            "⚠️ Conversational Q&A requires an active OpenAI API Key.\n"
+            "Please add `OPENAI_API_KEY` to your `.env` file to enable this feature."
+        )
+
+    try:
+        from openai import AsyncOpenAI
+        client = AsyncOpenAI(api_key=api_key)
+
+        system_prompt = (
+            "You are DRCode AI, an expert career coach and resume analyzer.\n"
+            "The user has uploaded their Resume and a target Job Description (JD).\n"
+            "Answer their question clearly, professionally, and concisely based strictly on "
+            "the provided documents. If the question is unrelated to resumes, careers, or "
+            "the provided text, politely redirect them back to the topic."
+        )
+
+        user_prompt = (
+            f"### Target Job Description ###\n{jd_text}\n\n"
+            f"### Candidate Resume ###\n{resume_text}\n\n"
+            f"### User Question ###\n{question}"
+        )
+
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.7,
+            max_tokens=500,
+        )
+
+        return response.choices[0].message.content.strip()
+
+    except Exception as exc:
+        logger.error("Q&A OpenAI call failed: %s", exc)
+        return "❌ Sorry, I encountered an error while trying to answer your question. Please try again later."

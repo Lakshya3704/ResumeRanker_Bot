@@ -1,0 +1,3 @@
+This is a sample Job Description for a Senior Python Developer.
+Required skills: Python, FastAPI, Docker, Kubernetes, PostgreSQL, AWS, NLP, Machine Learning.
+Experience: 5+ years building scalable REST APIs.

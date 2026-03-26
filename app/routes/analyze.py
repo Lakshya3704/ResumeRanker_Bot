@@ -19,13 +19,15 @@ from app.models.schemas import (
     ImproveResumeRequest,
     ImproveResumeResponse,
     GenerateResumeRequest,
+    AskRequest,
+    AskResponse,
 )
 from app.services.file_parser import extract_text, UnsupportedFileTypeError
 from app.services.nlp_processor import process_text
 from app.services.matcher import match
 from app.services.scorer import compute_score
 from app.services.recommender import generate_recommendations
-from app.services.improver import improve_resume
+from app.services.improver import improve_resume, answer_question
 from app.services.resume_gen import generate_pdf, generate_docx
 from app.utils.helpers import save_temp_file, cleanup_temp_file, setup_logging
 
@@ -102,16 +104,13 @@ async def analyze_resume(
                 total_score=score.total_score,
                 grade=score.grade,
             ),
-            recommendations=RecommendationsResponse(
-                missing_skills=recs.missing_skills,
-                weak_areas=recs.weak_areas,
-                suggestions=recs.suggestions,
-                format_tips=recs.format_tips,
-            ),
+            recommendations=recs,
             matched_skills=match_result.matched_skills,
             missing_skills=match_result.missing_skills,
             jd_skills=list(jd_info.skills),
             resume_skills=list(resume_info.skills),
+            jd_text=jd_text,
+            resume_text=resume_text,
         )
 
     except HTTPException:
@@ -182,3 +181,24 @@ async def generate_resume_endpoint(body: GenerateResumeRequest):
     except Exception as exc:
         logger.exception("Resume generation failed")
         raise HTTPException(500, f"Generation failed: {exc}")
+
+
+# ──────────────────────────────────────────────
+#  POST /ask
+# ──────────────────────────────────────────────
+
+@router.post("/ask", response_model=AskResponse)
+async def ask_question_endpoint(body: AskRequest):
+    """
+    Endpoint for asking conversational questions about the JD and resume.
+    """
+    try:
+        answer = await answer_question(
+            question=body.question,
+            resume_text=body.resume_text,
+            jd_text=body.jd_text,
+        )
+        return AskResponse(answer=answer)
+    except Exception as exc:
+        logger.exception("Q&A failed")
+        raise HTTPException(500, f"Failed to get answer: {exc}")

@@ -186,3 +186,264 @@ const heroObserver = new IntersectionObserver(
 
 const heroSection = document.getElementById("hero");
 if (heroSection) heroObserver.observe(heroSection);
+
+
+/* ═══════════════════════════════════════════════
+   WEB APP LOGIC (Phase 3)
+   ═══════════════════════════════════════════════ */
+
+let globalJdText = "";
+let globalResumeText = "";
+let globalMissingSkills = [];
+let globalSuggestions = [];
+
+// ── Drag & Drop Logic ──
+function setupDropArea(areaId, inputId) {
+    const dropArea = document.getElementById(areaId);
+    if (!dropArea) return;
+    const input = document.getElementById(inputId);
+    const msg = dropArea.querySelector(".file-msg");
+
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+
+    ["dragenter", "dragover"].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.add("dragover"), false);
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.remove("dragover"), false);
+    });
+
+    dropArea.addEventListener("drop", (e) => {
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            input.files = e.dataTransfer.files;
+            handleFileSelect(dropArea, msg, file);
+        }
+    }, false);
+
+    input.addEventListener("change", function() {
+        if (this.files.length > 0) {
+            handleFileSelect(dropArea, msg, this.files[0]);
+        }
+    });
+}
+
+function handleFileSelect(dropArea, msgEl, file) {
+    msgEl.textContent = file.name;
+    dropArea.classList.add("has-file");
+}
+
+setupDropArea("jd-drop", "jd-file");
+setupDropArea("resume-drop", "resume-file");
+
+// ── Form Submit (Analyze) ──
+const analyzeForm = document.getElementById("analyze-form");
+if (analyzeForm) {
+    analyzeForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const jdInput = document.getElementById("jd-file");
+        const resInput = document.getElementById("resume-file");
+        const errorEl = document.getElementById("analyze-error");
+        
+        if (!jdInput.files[0] || !resInput.files[0]) {
+            errorEl.style.display = "block";
+            errorEl.textContent = "Please provide both JD and Resume.";
+            return;
+        }
+        
+        errorEl.style.display = "none";
+        
+        // Switch UI to loading
+        document.getElementById("results-initial").style.display = "none";
+        document.getElementById("results-content").style.display = "none";
+        document.getElementById("results-loading").style.display = "flex";
+        
+        const btn = document.getElementById("analyze-btn");
+        btn.disabled = true;
+        btn.textContent = "⏳ Analyzing...";
+
+        const formData = new FormData();
+        formData.append("jd_file", jdInput.files[0]);
+        formData.append("resume_file", resInput.files[0]);
+
+        try {
+            const resp = await fetch("/analyze", {
+                method: "POST",
+                body: formData
+            });
+            
+            if (!resp.ok) {
+                const errData = await resp.json();
+                throw new Error(errData.detail || "Analysis failed");
+            }
+            
+            const data = await resp.json();
+            
+            // Save global state for chat and downloads
+            globalJdText = data.jd_text;
+            globalResumeText = data.resume_text;
+            globalMissingSkills = data.missing_skills;
+            globalSuggestions = data.recommendations.suggestions;
+
+            // Render Results
+            document.getElementById("res-score").innerHTML = `${data.score.total_score}<span style="font-size:1rem;">/10</span>`;
+            document.getElementById("res-grade").textContent = `Grade: ${data.score.grade}`;
+            
+            let color = "var(--green)";
+            if (data.score.total_score < 6) color = "var(--pink)";
+            else if (data.score.total_score < 8) color = "var(--orange)";
+            document.getElementById("res-grade").style.color = color;
+
+            document.getElementById("res-matched").innerHTML = data.matched_skills.length > 0
+                ? data.matched_skills.slice(0, 10).join(", ")
+                : "None";
+            
+            document.getElementById("res-missing").innerHTML = data.missing_skills.length > 0
+                ? data.missing_skills.slice(0, 10).join(", ")
+                : "None";
+
+            const sugList = document.getElementById("res-suggestions");
+            sugList.innerHTML = "";
+            let allSugs = [...data.recommendations.weak_areas, ...data.recommendations.suggestions].slice(0, 5);
+            if (allSugs.length === 0) allSugs.push("Your resume looks great! Follow the standard ATS format.");
+            allSugs.forEach(s => {
+                const li = document.createElement("li");
+                li.style.marginBottom = "0.4rem";
+                li.textContent = s;
+                sugList.appendChild(li);
+            });
+
+            // Show Results pane
+            document.getElementById("results-loading").style.display = "none";
+            document.getElementById("results-content").style.display = "block";
+            
+            // Reset chat
+            const chatBox = document.getElementById("chat-messages");
+            chatBox.innerHTML = `
+                <div class="chat-bubble ai-bubble">
+                    Hello! I've analyzed your resume against the job description. Do you have any questions about how to improve it further?
+                </div>
+            `;
+
+        } catch (err) {
+            document.getElementById("results-loading").style.display = "none";
+            document.getElementById("results-initial").style.display = "block";
+            errorEl.style.display = "block";
+            errorEl.textContent = `Error: ${err.message}`;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "🚀 Analyze Resume";
+        }
+    });
+}
+
+
+// ── Downloads ──
+async function downloadResume(format) {
+    if (!globalResumeText || !globalJdText) {
+        alert("Please analyze a resume first.");
+        return;
+    }
+    
+    alert(`Getting ${format.toUpperCase()} ready. This may take a few seconds as AI improves your resume…`);
+
+    try {
+        // First get improved text
+        const imprResp = await fetch("/improve-resume", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                resume_text: globalResumeText,
+                jd_text: globalJdText,
+                missing_skills: globalMissingSkills,
+                suggestions: globalSuggestions
+            })
+        });
+
+        if (!imprResp.ok) throw new Error("Failed to improve resume");
+        const imprData = await imprResp.json();
+        
+        // Now generate file
+        const genResp = await fetch("/generate-resume", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                improved_text: imprData.improved_text,
+                format: format
+            })
+        });
+
+        if (!genResp.ok) throw new Error("Failed to generate document");
+        
+        // Download blob
+        const blob = await genResp.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `improved_resume.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+    } catch (err) {
+        alert(`Error downloading resume: ${err.message}`);
+    }
+}
+
+
+// ── Chat Logic ──
+const chatForm = document.getElementById("chat-form");
+if (chatForm) {
+    chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const input = document.getElementById("chat-input");
+        const msg = input.value.trim();
+        if (!msg) return;
+
+        input.value = "";
+        
+        const chatBox = document.getElementById("chat-messages");
+        
+        // Add user msg
+        const userDiv = document.createElement("div");
+        userDiv.className = "chat-bubble user-bubble";
+        userDiv.textContent = msg;
+        chatBox.appendChild(userDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Add loading bubble
+        const loadDiv = document.createElement("div");
+        loadDiv.className = "chat-bubble ai-bubble";
+        loadDiv.textContent = "Thinking...";
+        chatBox.appendChild(loadDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            const resp = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    question: msg,
+                    resume_text: globalResumeText,
+                    jd_text: globalJdText
+                })
+            });
+
+            if (!resp.ok) throw new Error("Failed to get answer");
+            const data = await resp.json();
+            
+            // Replace loading with real answer
+            loadDiv.textContent = data.answer;
+        } catch (err) {
+            loadDiv.textContent = "❌ Error getting response: " + err.message;
+        }
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+}

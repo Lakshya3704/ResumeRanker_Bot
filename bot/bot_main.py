@@ -6,10 +6,10 @@ Initialises the Application, registers handlers, and starts polling.
 
 from __future__ import annotations
 
-from telegram.ext import Application, CallbackQueryHandler
+from telegram.ext import Application, CallbackQueryHandler, MessageHandler, filters
 
 from app.utils.helpers import get_env, setup_logging
-from bot.handlers import build_conversation_handler, download_improved
+from bot.handlers import build_conversation_handler, download_improved, handle_question
 
 logger = setup_logging("drcode.bot_main")
 
@@ -38,6 +38,11 @@ def main() -> None:
     # Register callback for download button
     application.add_handler(
         CallbackQueryHandler(download_improved, pattern="^download_improved$")
+    )
+
+    # Register Q&A text handler (only catches text outside the ConversationHandler)
+    application.add_handler(
+        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_question)
     )
 
     # Start polling

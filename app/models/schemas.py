@@ -40,6 +40,8 @@ class AnalysisResponse(BaseModel):
     missing_skills: List[str]   = Field(default_factory=list)
     jd_skills: List[str]        = Field(default_factory=list)
     resume_skills: List[str]    = Field(default_factory=list)
+    jd_text: str                = Field("", description="Raw extracted JD text for Q&A context")
+    resume_text: str            = Field("", description="Raw extracted Resume text for Q&A context")
 
 
 # ──────────────────────────────────────────────
@@ -97,6 +99,22 @@ class TokenResponse(BaseModel):
     """JWT token + user info returned on signup/login."""
     token: str
     user: UserResponse
+
+
+# ──────────────────────────────────────────────
+#  Conversational Q&A
+# ──────────────────────────────────────────────
+
+class AskRequest(BaseModel):
+    """Body for POST /ask."""
+    question: str = Field(..., description="User's question")
+    resume_text: str = Field(..., description="Candidate's original resume text")
+    jd_text: str = Field(..., description="Target Job Description text")
+
+
+class AskResponse(BaseModel):
+    """AI answer to the question."""
+    answer: str
 
 
 # ──────────────────────────────────────────────
