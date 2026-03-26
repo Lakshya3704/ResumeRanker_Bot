@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DRCode – AI Resume Analyzer | Land Your Dream Job</title>
+    <meta name="description" content="Analyze your resume against any job description with AI. Get a score out of 10, missing skills, improvement suggestions, and an auto-improved resume." />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+</head>
+<body>
+
+<!-- Particle Background -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <a href="#" class="nav-brand">
+            <div class="nav-logo">DR</div>
+            <span class="nav-title">DRCode</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#preview">Preview</a></li>
+            <li><a href="https://t.me/ResumeRanker_Bot" target="_blank" class="nav-cta" id="nav-try-btn">🤖 Try Bot</a></li>
+        </ul>
+        <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            AI-Powered Resume Analysis
+        </div>
+        <h1>
+            Land Your Dream Job<br />
+            with <span class="gradient-text">DRCode AI</span>
+        </h1>
+        <p>
+            Upload your resume and a job description — get an instant score
+            out of 10, discover missing skills, and download an AI-improved
+            resume. All through our Telegram bot.
+        </p>
+        <div class="hero-buttons">
+            <a href="https://t.me/ResumeRanker_Bot" target="_blank" class="btn btn-primary btn-large" id="hero-try-btn">
+                🤖 Try Bot on Telegram
+            </a>
+            <a href="#features" class="btn btn-secondary btn-large">
+                ✨ See Features
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number" id="stat-users">500+</span>
+                <span class="stat-label">Users</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10k+</span>
+                <span class="stat-label">Resumes Analyzed</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">95%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FEATURES
+     ═══════════════════════════════════════════ -->
+<section id="features">
+    <div class="section-container">
+        <div class="section-header reveal">
+            <span class="section-tag">// Features</span>
+            <h2 class="section-title">Everything You Need to Win</h2>
+            <p class="section-subtitle">
+                Powered by NLP, Sentence-BERT, and OpenAI to give you
+                the edge in every job application.
+            </p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <div class="feature-icon cyan">📊</div>
+                <h3>Smart Scoring</h3>
+                <p>Weighted score out of 10 based on skills match, experience relevance, keyword overlap, and semantic similarity.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon purple">🧠</div>
+                <h3>NLP Analysis</h3>
+                <p>spaCy-powered extraction of skills, tools, experience, and education from both your resume and the JD.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon pink">🤖</div>
+                <h3>AI Resume Improver</h3>
+                <p>OpenAI GPT rewrites your resume — adding missing skills naturally and strengthening bullet points with metrics.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon green">📄</div>
+                <h3>PDF + DOCX Export</h3>
+                <p>Download your improved resume in both PDF and DOCX formats, ready to submit to any ATS system.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon orange">🎯</div>
+                <h3>Skill Gap Analysis</h3>
+                <p>See exactly which skills the JD requires that your resume is missing — and how to add them.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon cyan">📋</div>
+                <h3>ATS Format Tips</h3>
+                <p>Get section ordering, font, layout, and keyword suggestions to pass Applicant Tracking Systems.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS
+     ═══════════════════════════════════════════ -->
+<section id="how-it-works" style="background: var(--bg-secondary);">
+    <div class="section-container">
+        <div class="section-header reveal">
+            <span class="section-tag">// How It Works</span>
+            <h2 class="section-title">3 Simple Steps</h2>
+            <p class="section-subtitle">
+                From upload to improved resume in under 30 seconds.
+            </p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card reveal">
+                <div class="step-number">1</div>
+                <h3>Upload JD</h3>
+                <p>Send your target job description as a PDF, DOCX, or TXT file to our Telegram bot.</p>
+            </div>
+            <div class="step-card reveal">
+                <div class="step-number">2</div>
+                <h3>Upload Resume</h3>
+                <p>Send your current resume (PDF or DOCX). The AI analyzes both documents instantly.</p>
+            </div>
+            <div class="step-card reveal">
+                <div class="step-number">3</div>
+                <h3>Get Results</h3>
+                <p>Receive your score, missing skills, suggestions, and download your improved resume!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SCORE PREVIEW
+     ═══════════════════════════════════════════ -->
+<section id="preview">
+    <div class="section-container">
+        <div class="section-header reveal">
+            <span class="section-tag">// Preview</span>
+            <h2 class="section-title">What You'll Get</h2>
+            <p class="section-subtitle">
+                A detailed breakdown — not just a number.
+            </p>
+        </div>
+        <div class="score-preview reveal">
+            <div class="header">
+                <div style="font-size:0.8rem; color: var(--text-muted); margin-bottom:0.3rem;">RESUME ANALYSIS REPORT</div>
+                <div class="score-big">8.2<span style="font-size:1rem;">/10</span></div>
+                <div style="color: var(--green); font-size:0.9rem;">Grade: B+</div>
+            </div>
+            <hr style="border-color: var(--border-glass); margin: 1rem 0;" />
+            <div class="line">📈 <span class="skill">Skills Match:   3.2/4.0</span></div>
+            <div class="line">📈 <span class="skill">Experience:     1.8/2.0</span></div>
+            <div class="line">📈 <span class="skill">Keywords:       1.6/2.0</span></div>
+            <div class="line">📈 <span class="skill">Similarity:     1.6/2.0</span></div>
+            <br />
+            <div class="line">❌ <span class="missing">Missing: Docker, Kubernetes, AWS</span></div>
+            <br />
+            <div class="line">💡 <span class="suggestion">Add quantified achievements</span></div>
+            <div class="line">💡 <span class="suggestion">Improve project descriptions</span></div>
+            <div class="line">💡 <span class="suggestion">Include React.js projects</span></div>
+            <br />
+            <div class="line" style="color: var(--cyan);">📥 Download Improved Resume [PDF + DOCX]</div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CTA SECTION
+     ═══════════════════════════════════════════ -->
+<section id="cta" style="background: var(--bg-secondary);">
+    <div class="section-container" style="text-align:center; max-width:600px;">
+        <div class="reveal">
+            <h2 class="section-title">Ready to Boost Your Resume?</h2>
+            <p class="section-subtitle" style="margin-bottom:2rem;">
+                Try DRCode for free on Telegram. No signup needed — just send your files and get instant results.
+            </p>
+            <a href="https://t.me/ResumeRanker_Bot" target="_blank" class="btn btn-primary btn-large" id="cta-try-btn">
+                🤖 Try Bot on Telegram →
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="https://t.me/ResumeRanker_Bot" target="_blank">Try Bot</a>
+    </div>
+    <p>
+        © 2026 <a href="#">DRCode</a> – AI Resume Analyzer.
+        Built with ❤️ using FastAPI, spaCy & Sentence-BERT.
+    </p>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
