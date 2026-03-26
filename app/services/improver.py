@@ -50,8 +50,16 @@ async def _improve_with_openai(
     """Call OpenAI to rewrite the resume for a given JD."""
     try:
         from openai import AsyncOpenAI
+        
+        client_kwargs = {"api_key": api_key}
+        model_name = "gpt-3.5-turbo"
+        
+        # Detect Google Gemini keys and route through compatibility layer
+        if api_key.startswith("AIza"):
+            client_kwargs["base_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+            model_name = "gemini-2.5-flash"
 
-        client = AsyncOpenAI(api_key=api_key)
+        client = AsyncOpenAI(**client_kwargs)
 
         system_prompt = (
             "You are a professional resume writer and career coach. "
@@ -73,13 +81,12 @@ async def _improve_with_openai(
         )
 
         response = await client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=model_name,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.7,
-            max_tokens=2000,
         )
 
         improved = response.choices[0].message.content
@@ -182,7 +189,16 @@ async def answer_question(question: str, resume_text: str, jd_text: str) -> str:
 
     try:
         from openai import AsyncOpenAI
-        client = AsyncOpenAI(api_key=api_key)
+        
+        client_kwargs = {"api_key": api_key}
+        model_name = "gpt-3.5-turbo"
+        
+        # Detect Google Gemini keys and route through compatibility layer
+        if api_key.startswith("AIza"):
+            client_kwargs["base_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+            model_name = "gemini-2.5-flash"
+
+        client = AsyncOpenAI(**client_kwargs)
 
         system_prompt = (
             "You are DRCode AI, an expert career coach and resume analyzer.\n"
@@ -199,13 +215,12 @@ async def answer_question(question: str, resume_text: str, jd_text: str) -> str:
         )
 
         response = await client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=model_name,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.7,
-            max_tokens=500,
         )
 
         return response.choices[0].message.content.strip()

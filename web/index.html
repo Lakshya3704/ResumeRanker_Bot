@@ -1,198 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DRCode – AI Resume Analyzer | Land Your Dream Job</title>
-    <meta name="description" content="Analyze your resume against any job description with AI. Get a score out of 10, missing skills, improvement suggestions, and an auto-improved resume." />
+    <meta name="description"
+        content="Analyze your resume against any job description with AI. Get a score out of 10, missing skills, improvement suggestions, and an auto-improved resume." />
+    <!-- Force browser to skip cache for development -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
 </head>
+
 <body>
 
-<!-- Particle Background -->
-<canvas id="particles-canvas"></canvas>
+    <!-- Particle Background -->
+    <canvas id="particles-canvas"></canvas>
 
-<!-- ═══════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════
      NAVIGATION
      ═══════════════════════════════════════════ -->
-<nav class="navbar" id="navbar">
-    <div class="nav-container">
-        <a href="#" class="nav-brand">
-            <div class="nav-logo">DR</div>
-            <span class="nav-title">DRCode</span>
-        </a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#web-app">Web App</a></li>
-            <li><a href="https://t.me/ResumeRanker_Bot" target="_blank" class="nav-cta" id="nav-try-btn">🤖 Try Bot</a></li>
-        </ul>
-        <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
-            <span></span>
-            <span></span>
-            <span></span>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <div class="nav-logo">DR</div>
+                <span class="nav-title">DRCode</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#web-app">Web App</a></li>
+                <li><a href="https://t.me/ResumeRanker_Bot" target="_blank" class="nav-cta" id="nav-try-btn">🤖 Try
+                        Bot</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- ═══════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════
      HERO
      ═══════════════════════════════════════════ -->
-<section class="hero" id="hero">
-    <div class="hero-content">
-        <div class="hero-badge">
-            <span class="dot"></span>
-            AI-Powered Resume Analysis
-        </div>
-        <h1>
-            Land Your Dream Job<br />
-            with <span class="gradient-text">DRCode AI</span>
-        </h1>
-        <p>
-            Upload your resume and a job description — get an instant score
-            out of 10, discover missing skills, and download an AI-improved
-            resume. All through our Telegram bot.
-        </p>
-        <div class="hero-buttons">
-            <a href="#web-app" class="btn btn-primary btn-large">
-                🌐 Try on Web Now
-            </a>
-            <a href="https://t.me/ResumeRanker_Bot" target="_blank" class="btn btn-secondary btn-large">
-                🤖 Try Bot on Telegram
-            </a>
-        </div>
-        <div class="hero-stats">
-            <div class="stat-item">
-                <span class="stat-number" id="stat-users">500+</span>
-                <span class="stat-label">Users</span>
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                AI-Powered Resume Analysis
             </div>
-            <div class="stat-item">
-                <span class="stat-number">10k+</span>
-                <span class="stat-label">Resumes Analyzed</span>
+            <h1>
+                Land Your Dream Job<br />
+                with <span class="gradient-text">DRCode AI</span>
+            </h1>
+            <p>
+                Upload your resume and a job description — get an instant score
+                out of 10, discover missing skills, and download an AI-improved
+                resume. All through our Telegram bot.
+            </p>
+            <div class="hero-buttons">
+                <a href="#web-app" class="btn btn-primary btn-large">
+                    💬 Chat with Web Bot
+                </a>
+                <a href="https://t.me/ResumeRanker_Bot" target="_blank" class="btn btn-secondary btn-large">
+                    🤖 Try Bot on Telegram
+                </a>
             </div>
-            <div class="stat-item">
-                <span class="stat-number">95%</span>
-                <span class="stat-label">Accuracy</span>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-users">500+</span>
+                    <span class="stat-label">Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10k+</span>
+                    <span class="stat-label">Resumes Analyzed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ═══════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════
      FEATURES
      ═══════════════════════════════════════════ -->
-<section id="features">
-    <div class="section-container">
-        <div class="section-header reveal">
-            <span class="section-tag">// Features</span>
-            <h2 class="section-title">Everything You Need to Win</h2>
-            <p class="section-subtitle">
-                Powered by NLP, Sentence-BERT, and OpenAI to give you
-                the edge in every job application.
-            </p>
+    <section id="features">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-tag">// Features</span>
+                <h2 class="section-title">Everything You Need to Win</h2>
+                <p class="section-subtitle">
+                    Powered by NLP, Sentence-BERT, and OpenAI to give you
+                    the edge in every job application.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon cyan">📊</div>
+                    <h3>Smart Scoring</h3>
+                    <p>Weighted score out of 10 based on skills match, experience relevance, keyword overlap, and
+                        semantic similarity.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon purple">🧠</div>
+                    <h3>NLP Analysis</h3>
+                    <p>spaCy-powered extraction of skills, tools, experience, and education from both your resume and
+                        the JD.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon pink">🤖</div>
+                    <h3>AI Resume Improver</h3>
+                    <p>OpenAI GPT rewrites your resume — adding missing skills naturally and strengthening bullet points
+                        with metrics.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon green">📄</div>
+                    <h3>PDF + DOCX Export</h3>
+                    <p>Download your improved resume in both PDF and DOCX formats, ready to submit to any ATS system.
+                    </p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon orange">🎯</div>
+                    <h3>Skill Gap Analysis</h3>
+                    <p>See exactly which skills the JD requires that your resume is missing — and how to add them.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon cyan">📋</div>
+                    <h3>ATS Format Tips</h3>
+                    <p>Get section ordering, font, layout, and keyword suggestions to pass Applicant Tracking Systems.
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="features-grid">
-            <div class="feature-card reveal">
-                <div class="feature-icon cyan">📊</div>
-                <h3>Smart Scoring</h3>
-                <p>Weighted score out of 10 based on skills match, experience relevance, keyword overlap, and semantic similarity.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon purple">🧠</div>
-                <h3>NLP Analysis</h3>
-                <p>spaCy-powered extraction of skills, tools, experience, and education from both your resume and the JD.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon pink">🤖</div>
-                <h3>AI Resume Improver</h3>
-                <p>OpenAI GPT rewrites your resume — adding missing skills naturally and strengthening bullet points with metrics.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon green">📄</div>
-                <h3>PDF + DOCX Export</h3>
-                <p>Download your improved resume in both PDF and DOCX formats, ready to submit to any ATS system.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon orange">🎯</div>
-                <h3>Skill Gap Analysis</h3>
-                <p>See exactly which skills the JD requires that your resume is missing — and how to add them.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon cyan">📋</div>
-                <h3>ATS Format Tips</h3>
-                <p>Get section ordering, font, layout, and keyword suggestions to pass Applicant Tracking Systems.</p>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
-<!-- ═══════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════
      HOW IT WORKS
      ═══════════════════════════════════════════ -->
-<section id="how-it-works" style="background: var(--bg-secondary);">
-    <div class="section-container">
-        <div class="section-header reveal">
-            <span class="section-tag">// How It Works</span>
-            <h2 class="section-title">3 Simple Steps</h2>
-            <p class="section-subtitle">
-                From upload to improved resume in under 30 seconds.
-            </p>
+    <section id="how-it-works" style="background: var(--bg-secondary);">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-tag">// How It Works</span>
+                <h2 class="section-title">3 Simple Steps</h2>
+                <p class="section-subtitle">
+                    From upload to improved resume in under 30 seconds.
+                </p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card reveal">
+                    <div class="step-number">1</div>
+                    <h3>Upload JD</h3>
+                    <p>Send your target job description as a PDF, DOCX, or TXT file to our Telegram bot.</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-number">2</div>
+                    <h3>Upload Resume</h3>
+                    <p>Send your current resume (PDF or DOCX). The AI analyzes both documents instantly.</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-number">3</div>
+                    <h3>Get Results</h3>
+                    <p>Receive your score, missing skills, suggestions, and download your improved resume!</p>
+                </div>
+            </div>
         </div>
-        <div class="steps-grid">
-            <div class="step-card reveal">
-                <div class="step-number">1</div>
-                <h3>Upload JD</h3>
-                <p>Send your target job description as a PDF, DOCX, or TXT file to our Telegram bot.</p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+     INTERACTIVE WEB APP
+     ═══════════════════════════════════════════ -->
+    <section id="web-app" style="background: var(--bg-primary); position: relative;">
+        <div class="section-container" style="max-width: 1200px;">
+            <div class="section-header reveal">
+                <span class="section-tag">// Web Application</span>
+                <h2 class="section-title">Analyze & Chat Natively</h2>
+                <p class="section-subtitle">
+                    Don't want to use Telegram? Upload your files here and ask the AI follow-up questions directly.
+                </p>
             </div>
-            <div class="step-card reveal">
-                <div class="step-number">2</div>
-                <h3>Upload Resume</h3>
-                <p>Send your current resume (PDF or DOCX). The AI analyzes both documents instantly.</p>
-            </div>
-            <div class="step-card reveal">
-                <div class="step-number">3</div>
-                <h3>Get Results</h3>
-                <p>Receive your score, missing skills, suggestions, and download your improved resume!</p>
+
+            <div class="webapp-grid reveal">
+
+                <!-- LEFT PANE: UPLOAD FORM -->
+                <div class="webapp-pane" id="upload-pane">
+                    <form id="analyze-form">
+                        <div class="form-group">
+                            <label>1. Job Description (PDF/DOCX/TXT)</label>
+                            <div class="file-drop-area" id="jd-drop">
+                                <span class="file-icon">📄</span>
+                                <span class="file-msg">Choose a JD file or drag it here</span>
+                                <input type="file" id="jd-file" accept=".pdf,.docx,.txt" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>2. Your Resume (PDF/DOCX)</label>
+                            <div class="file-drop-area" id="resume-drop">
+                                <span class="file-icon">📝</span>
+                                <span class="file-msg">Choose a Resume file or drag it here</span>
+                                <input type="file" id="resume-file" accept=".pdf,.docx" required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100" id="analyze-btn">
+                            🚀 Analyze Resume
+                        </button>
+                        <div id="analyze-error" class="error-msg"
+                            style="display:none; text-align:center; margin-top:1rem; color:var(--pink);"></div>
+                    </form>
+                </div>
+
+                <!-- RIGHT PANE: RESULTS & CHAT -->
+                <div class="webapp-pane" id="results-pane"
+                    style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px dashed var(--border-glass);">
+
+                    <!-- Initial State -->
+                    <div id="results-initial">
+                        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">🔍</div>
+                        <p style="color: var(--text-muted);">Upload your documents and click Analyze to see your results
+                            here.</p>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="results-loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 1rem; color: var(--cyan);">Analyzing documents using NLP &
+                            Sentence-BERT...</p>
+                    </div>
+
+                    <!-- Active Results State -->
+                    <div id="results-content" style="display: none; width: 100%; text-align: left;">
+
+                        <!-- Score Details -->
+                        <div class="score-header" style="text-align: center; margin-bottom: 1.5rem;">
+                            <div style="font-size:0.8rem; color: var(--text-muted);">FINAL SCORE</div>
+                            <div class="score-big" id="res-score">0.0<span style="font-size:1rem;">/10</span></div>
+                            <div style="color: var(--green); font-size:1.2rem; font-weight: bold;" id="res-grade">Grade:
+                                A</div>
+                        </div>
+
+                        <div class="results-grid"
+                            style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="res-box">
+                                <h4>Matched Skills</h4>
+                                <p id="res-matched" style="font-size: 0.9rem; color: var(--green);">None</p>
+                            </div>
+                            <div class="res-box">
+                                <h4>Missing Skills</h4>
+                                <p id="res-missing" style="font-size: 0.9rem; color: var(--pink);">None</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4>Suggestions</h4>
+                            <ul id="res-suggestions"
+                                style="padding-left: 1.2rem; font-size: 0.9rem; color: var(--text-muted);">
+                            </ul>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center;">
+                            <button class="btn btn-secondary" onclick="downloadResume('pdf')">📥 Download PDF</button>
+                            <button class="btn btn-secondary" onclick="downloadResume('docx')">📥 Download DOCX</button>
+                        </div>
+
+                        <!-- Chat UI -->
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                💬 Ask AI about your Resume
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="chat-bubble ai-bubble">
+                                    Hello! I've analyzed your resume against the job description. Do you have any
+                                    questions about how to improve it further?
+                                </div>
+                            </div>
+                            <form id="chat-form" class="chat-input-area">
+                                <input type="text" id="chat-input" placeholder="e.g., Why is Docker missing?"
+                                    autocomplete="off" required />
+                                <button type="submit">Send</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-
-
-<!-- ═══════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════
      CTA SECTION
      ═══════════════════════════════════════════ -->
-<section id="cta" style="background: var(--bg-secondary);">
-    <div class="section-container" style="text-align:center; max-width:600px;">
-        <div class="reveal">
-            <h2 class="section-title">Ready to Boost Your Resume?</h2>
-            <p class="section-subtitle" style="margin-bottom:2rem;">
-                Try DRCode for free on Telegram. No signup needed — just send your files and get instant results.
-            </p>
-            <a href="https://t.me/ResumeRanker_Bot" target="_blank" class="btn btn-primary btn-large" id="cta-try-btn">
-                🤖 Try Bot on Telegram →
-            </a>
+    <section id="cta" style="background: var(--bg-secondary);">
+        <div class="section-container" style="text-align:center; max-width:600px;">
+            <div class="reveal">
+                <h2 class="section-title">Ready to Boost Your Resume?</h2>
+                <p class="section-subtitle" style="margin-bottom:2rem;">
+                    Try DRCode for free, either here on the web or instantly via Telegram.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="#web-app" class="btn btn-primary btn-large">
+                        💬 Chat with Web Bot
+                    </a>
+                    <a href="https://t.me/ResumeRanker_Bot" target="_blank" class="btn btn-secondary btn-large">
+                        🤖 Try Bot on Telegram →
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ═══════════════════════════════════════════
+    <!-- Floating Action Button -->
+    <a href="#web-app" class="fab-web-bot" title="Open Web Bot">
+        💬 Web Bot
+    </a>
+
+    <!-- ═══════════════════════════════════════════
      FOOTER
      ═══════════════════════════════════════════ -->
-<footer class="footer">
-    <div class="footer-links">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="https://t.me/ResumeRanker_Bot" target="_blank">Try Bot</a>
-    </div>
-    <p>
-        © 2026 <a href="#">DRCode</a> – AI Resume Analyzer.
-        Built with ❤️ using FastAPI, spaCy & Sentence-BERT.
-    </p>
-</footer>
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="https://t.me/ResumeRanker_Bot" target="_blank">Try Bot</a>
+        </div>
+        <p>
+            © 2026 <a href="#">DRCode</a> – AI Resume Analyzer.
 
-<script src="js/app.js"></script>
+        </p>
+    </footer>
+
+    <script src="js/app.js"></script>
 </body>
+
 </html>

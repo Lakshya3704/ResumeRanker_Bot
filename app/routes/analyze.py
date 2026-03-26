@@ -104,7 +104,12 @@ async def analyze_resume(
                 total_score=score.total_score,
                 grade=score.grade,
             ),
-            recommendations=recs,
+            recommendations=RecommendationsResponse(
+                missing_skills=recs.missing_skills,
+                weak_areas=recs.weak_areas,
+                suggestions=recs.suggestions,
+                format_tips=recs.format_tips,
+            ),
             matched_skills=match_result.matched_skills,
             missing_skills=match_result.missing_skills,
             jd_skills=list(jd_info.skills),
